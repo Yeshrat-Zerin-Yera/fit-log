@@ -35,7 +35,7 @@ export default function Hero() {
         {/* Right side */}
         <div className="overflow-hidden rounded-2xl border border-white/10">
           <img
-            src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1a?auto=format&fit=crop&w=1200&q=80"
+            src="../images/banner.png"
             alt="Person working out in a gym"
             className="h-[420px] w-full object-cover grayscale"
           />
