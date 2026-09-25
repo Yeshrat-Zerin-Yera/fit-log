@@ -16,6 +16,7 @@ export default function WorkoutActions({
     saveWorkout,
     isInPlan,
     isSaved,
+    showToast,
   } = useFitLog();
 
   const inPlan = isInPlan(workout.id);
@@ -26,7 +27,10 @@ export default function WorkoutActions({
 
       {/* Add to Plan */}
       <button
-        onClick={() => addToPlan(workout)}
+        onClick={() => {
+          addToPlan(workout);
+          showToast(`${workout.name} added to today's plan`);
+        }}
         disabled={inPlan}
         className="flex items-center justify-center gap-2 rounded-full bg-lime-400 px-6 py-3 font-bold text-black transition hover:bg-lime-300 disabled:cursor-not-allowed disabled:opacity-50"
       >
@@ -39,7 +43,10 @@ export default function WorkoutActions({
 
       {/* Save */}
       <button
-        onClick={() => saveWorkout(workout)}
+        onClick={() => {
+          saveWorkout(workout);
+          showToast(`${workout.name} saved for later`);
+        }}
         disabled={saved}
         className="flex items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-3 font-bold transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
       >

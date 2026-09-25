@@ -14,6 +14,8 @@ interface FitLogContextType {
   plan: Workout[];
   saved: Workout[];
 
+  showToast: (message: string) => void;
+
   addToPlan: (workout: Workout) => void;
   removeFromPlan: (id: number) => void;
 
@@ -36,6 +38,7 @@ export function FitLogProvider({
   const [plan, setPlan] = useState<Workout[]>([]);
   const [saved, setSaved] = useState<Workout[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [toast, setToast] = useState("");
 
   // Load data from localStorage ONCE
   useEffect(() => {
@@ -117,11 +120,20 @@ export function FitLogProvider({
     return saved.some((workout) => workout.id === id);
   }
 
+  function showToast(message: string) {
+    setToast(message);
+
+    setTimeout(() => {
+      setToast("");
+    }, 2500);
+  }
+
   return (
     <FitLogContext.Provider
       value={{
         plan,
         saved,
+        showToast,
         addToPlan,
         removeFromPlan,
         saveWorkout,
@@ -131,6 +143,14 @@ export function FitLogProvider({
       }}
     >
       {children}
+
+      {toast && (
+        <div className="toast toast-end toast-bottom z-50">
+          <div className="alert border border-lime-400/30 bg-zinc-900 text-white">
+            <span>{toast}</span>
+          </div>
+        </div>
+      )}
     </FitLogContext.Provider>
   );
 }
