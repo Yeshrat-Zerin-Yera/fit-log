@@ -13,6 +13,8 @@ import { Workout } from "@/types/workout";
 interface FitLogContextType {
   plan: Workout[];
   saved: Workout[];
+  completed: number[];
+
 
   showToast: (message: string) => void;
 
@@ -24,6 +26,9 @@ interface FitLogContextType {
 
   isInPlan: (id: number) => boolean;
   isSaved: (id: number) => boolean;
+
+  markAsDone: (id: number) => void;
+  isCompleted: (id: number) => boolean;
 }
 
 const FitLogContext = createContext<FitLogContextType | undefined>(
@@ -39,11 +44,15 @@ export function FitLogProvider({
   const [saved, setSaved] = useState<Workout[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [toast, setToast] = useState("");
+  const [completed, setCompleted] = useState<number[]>([]);
 
   // Load data from localStorage ONCE
   useEffect(() => {
     const storedPlan = localStorage.getItem("fitlog-plan");
     const storedSaved = localStorage.getItem("fitlog-saved");
+    const storedCompleted = localStorage.getItem(
+      "fitlog-completed"
+    );
 
     if (storedPlan) {
       setPlan(JSON.parse(storedPlan));
@@ -51,6 +60,10 @@ export function FitLogProvider({
 
     if (storedSaved) {
       setSaved(JSON.parse(storedSaved));
+    }
+
+    if (storedCompleted) {
+      setCompleted(JSON.parse(storedCompleted));
     }
 
     setLoaded(true);
@@ -75,6 +88,15 @@ export function FitLogProvider({
       JSON.stringify(saved)
     );
   }, [saved, loaded]);
+
+  useEffect(() => {
+    if (!loaded) return;
+
+    localStorage.setItem(
+      "fitlog-completed",
+      JSON.stringify(completed)
+    );
+  }, [completed, loaded]);
 
   function addToPlan(workout: Workout) {
     setPlan((currentPlan) => {
@@ -128,6 +150,20 @@ export function FitLogProvider({
     }, 2500);
   }
 
+  function markAsDone(id: number) {
+    setCompleted((current) => {
+      if (current.includes(id)) {
+        return current;
+      }
+
+      return [...current, id];
+    });
+  }
+
+  function isCompleted(id: number) {
+    return completed.includes(id);
+  }
+
   return (
     <FitLogContext.Provider
       value={{
@@ -140,6 +176,9 @@ export function FitLogProvider({
         removeSaved,
         isInPlan,
         isSaved,
+        completed,
+        markAsDone,
+        isCompleted,
       }}
     >
       {children}
