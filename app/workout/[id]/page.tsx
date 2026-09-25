@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getWorkouts } from "@/lib/api";
 import WorkoutActions from "@/components/WorkoutActions";
+import Footer from "@/components/Footer";
 
 interface WorkoutDetailsPageProps {
   params: Promise<{

@@ -2,14 +2,13 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import WorkoutCard from "@/components/WorkoutCard";
 import { getWorkouts } from "@/lib/api";
+import Footer from "@/components/Footer";
 
 export default async function Home() {
   const workouts = await getWorkouts();
 
   return (
     <>
-      <Navbar />
-
       <Hero />
 
       <section
