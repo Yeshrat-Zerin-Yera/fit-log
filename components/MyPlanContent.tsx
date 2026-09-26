@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Clock, Flame, Star, X, Check } from "lucide-react";
+import { Clock, Flame, Star, X, Check, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { useFitLog } from "@/context/FitLogContext";
 
@@ -137,18 +137,25 @@ export default function MyPlanContent() {
                         SORT BY
                     </label>
 
-                    <select
-                        id="sort"
-                        value={sortBy}
-                        onChange={(event) =>
-                            setSortBy(event.target.value as SortOption)
-                        }
-                        className="rounded-full border border-white/20 bg-zinc-950 px-4 py-2 text-sm font-bold text-white outline-none focus:border-lime-400"
-                    >
-                        <option value="duration">DURATION</option>
-                        <option value="calories">CALORIES</option>
-                        <option value="rating">RATING</option>
-                    </select>
+                    <div className="relative">
+                        <select
+                            id="sort"
+                            value={sortBy}
+                            onChange={(event) =>
+                                setSortBy(event.target.value as SortOption)
+                            }
+                            className="appearance-none rounded-full border border-white/20 bg-zinc-950 px-4 py-2 pr-10 text-sm font-bold text-white outline-none focus:border-lime-400"
+                        >
+                            <option value="duration">DURATION</option>
+                            <option value="calories">CALORIES</option>
+                            <option value="rating">RATING</option>
+                        </select>
+
+                        <ChevronDown
+                            size={16}
+                            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                        />
+                    </div>
                 </div>
                 {/* Workout list */}
                 {workouts.length === 0 ? (
