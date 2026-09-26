@@ -35,7 +35,7 @@ https://fit-log-three-bice.vercel.app/
 
 FitLog uses the FitLog workout API:
 
-`https://api.abcz.workers.dev/api/fitlog`
+`https://api.api-store.workers.dev/api/fitlog`
 
 ## Getting Started
 
