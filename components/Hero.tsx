@@ -1,24 +1,26 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowDownRight } from "lucide-react";
 
 export default function Hero() {
   return (
     <section className="bg-black px-4 py-16 text-white md:py-24">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-2">
+      <div className="mx-auto grid w-[90%] max-w-7xl items-center gap-10 md:grid-cols-2">
 
-        {/* Left side */}
+        {/* Left - Text */}
         <div>
+
           <p className="mb-4 text-sm font-bold tracking-[0.25em] text-lime-400">
             WORKOUT LIBRARY
           </p>
 
-          <h1 className="max-w-3xl text-5xl font-black uppercase leading-[0.95] tracking-tight md:text-7xl">
+          <h1 className="text-5xl font-black uppercase leading-[0.95] tracking-tight md:text-7xl">
             Train with intent.
             <br />
             Log every set.
           </h1>
 
-          <p className="mt-6 max-w-xl text-base leading-7 text-gray-400 md:text-lg">
+          <p className="mt-6 max-w-xl text-base leading-7 text-gray-300 md:text-lg">
             FitLog is a dark, no-nonsense gym companion: pick a lift,
             lock it into today's plan, and watch the week's work add up.
           </p>
@@ -30,14 +32,17 @@ export default function Hero() {
             BROWSE WORKOUTS
             <ArrowDownRight size={20} />
           </Link>
+
         </div>
 
-        {/* Right side */}
-        <div className="overflow-hidden rounded-2xl border border-white/10">
-          <img
-            src="../images/banner.png"
-            alt="Person working out in a gym"
-            className="h-[420px] w-full object-cover grayscale"
+        {/* Right - Image */}
+        <div className="relative h-[350px] overflow-hidden rounded-2xl md:h-[500px]">
+          <Image
+            src="/images/banner.png"
+            alt="Workout banner"
+            fill
+            priority
+            className="object-contain"
           />
         </div>
 

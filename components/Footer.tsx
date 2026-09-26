@@ -1,48 +1,30 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-black px-4 py-12 text-white">
-      <div className="mx-auto max-w-7xl">
+    <footer className="border-t border-white/10 bg-black px-4 py-8 text-white">
+      <div className="mx-auto flex w-[90%] max-w-7xl flex-col items-center justify-between gap-5 md:flex-row">
 
-        <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/icons/logo.png"
+            alt="FitLog logo"
+            width={36}
+            height={36}
+            className="object-contain"
+          />
 
-          {/* Logo */}
-          <div>
-            <Link
-              href="/"
-              className="text-2xl font-black tracking-tight"
-            >
-              FIT<span className="text-lime-400">LOG</span>
-            </Link>
+          <span className="text-2xl font-black tracking-tight">
+            FIT<span className="text-lime-400">LOG</span>
+          </span>
+        </Link>
 
-            <p className="mt-2 text-sm text-gray-500">
-              Train with intent. Log every set.
-            </p>
-          </div>
-
-          {/* Links */}
-          <div className="flex gap-6 text-sm font-bold text-gray-400">
-            <Link
-              href="/"
-              className="transition hover:text-white"
-            >
-              WORKOUTS
-            </Link>
-
-            <Link
-              href="/my-plan"
-              className="transition hover:text-white"
-            >
-              MY PLAN
-            </Link>
-          </div>
-
-        </div>
-
-        <div className="mt-10 border-t border-white/10 pt-6 text-sm text-gray-600">
-          © {new Date().getFullYear()} FitLog. All rights reserved.
-        </div>
+        {/* Copyright */}
+        <p className="text-center text-sm text-gray-500 md:text-right">
+          © 2026 FitLog — Workout Library. Train hard, log honest.
+        </p>
 
       </div>
     </footer>

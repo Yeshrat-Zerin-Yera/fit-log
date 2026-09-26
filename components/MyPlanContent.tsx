@@ -1,16 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { Clock, Flame, X } from "lucide-react";
+import { Clock, Flame, Star, X, Check } from "lucide-react";
 import { useState } from "react";
 import { useFitLog } from "@/context/FitLogContext";
 
 export default function MyPlanContent() {
     const [activeTab, setActiveTab] = useState<"plan" | "saved">("plan");
+    type SortOption = "duration" | "calories" | "rating";
+
+    const [sortBy, setSortBy] = useState<SortOption>("duration");
 
     const {
         plan,
         saved,
+        loaded,
         removeFromPlan,
         removeSaved,
         markAsDone,
@@ -18,7 +22,33 @@ export default function MyPlanContent() {
         showToast,
     } = useFitLog();
 
+    if (!loaded) {
+        return (
+            <main className="flex min-h-screen items-center justify-center bg-black text-white">
+                <div className="text-center">
+                    <div className="mx-auto mb-6 h-12 w-12 animate-spin rounded-full border-4 border-white/20 border-t-lime-400" />
+
+                    <p className="text-sm font-bold tracking-[0.25em] text-gray-400">
+                        LOADING WORKOUTS...
+                    </p>
+                </div>
+            </main>
+        );
+    }
+
     const workouts = activeTab === "plan" ? plan : saved;
+
+    const sortedWorkouts = [...workouts].sort((a, b) => {
+        if (sortBy === "duration") {
+            return a.duration - b.duration;
+        }
+
+        if (sortBy === "calories") {
+            return a.caloriesBurned - b.caloriesBurned;
+        }
+
+        return a.rating - b.rating;
+    });
 
     const totalMinutes = plan.reduce(
         (total, workout) => total + workout.duration,
@@ -45,8 +75,7 @@ export default function MyPlanContent() {
                     </h1>
 
                     <p className="mt-4 max-w-2xl text-gray-400">
-                        Build your workout plan and keep your saved exercises
-                        ready for later.
+                        Cap of five lifts for today. Finish them, then load more.
                     </p>
                 </div>
 
@@ -82,8 +111,8 @@ export default function MyPlanContent() {
                     <button
                         onClick={() => setActiveTab("plan")}
                         className={`rounded-full px-5 py-2 font-bold ${activeTab === "plan"
-                                ? "bg-lime-400 text-black"
-                                : "text-gray-400 hover:text-white"
+                            ? "bg-lime-400 text-black"
+                            : "text-gray-400 hover:text-white"
                             }`}
                     >
                         TODAY'S PLAN ({plan.length})
@@ -92,15 +121,35 @@ export default function MyPlanContent() {
                     <button
                         onClick={() => setActiveTab("saved")}
                         className={`rounded-full px-5 py-2 font-bold ${activeTab === "saved"
-                                ? "bg-lime-400 text-black"
-                                : "text-gray-400 hover:text-white"
+                            ? "bg-lime-400 text-black"
+                            : "text-gray-400 hover:text-white"
                             }`}
                     >
                         SAVED ({saved.length})
                     </button>
 
                 </div>
+                <div className="mb-6 flex items-center justify-end gap-3">
+                    <label
+                        htmlFor="sort"
+                        className="text-sm font-bold text-gray-500"
+                    >
+                        SORT BY
+                    </label>
 
+                    <select
+                        id="sort"
+                        value={sortBy}
+                        onChange={(event) =>
+                            setSortBy(event.target.value as SortOption)
+                        }
+                        className="rounded-full border border-white/20 bg-zinc-950 px-4 py-2 text-sm font-bold text-white outline-none focus:border-lime-400"
+                    >
+                        <option value="duration">DURATION</option>
+                        <option value="calories">CALORIES</option>
+                        <option value="rating">RATING</option>
+                    </select>
+                </div>
                 {/* Workout list */}
                 {workouts.length === 0 ? (
                     <div className="rounded-2xl border border-dashed border-white/20 px-6 py-20 text-center">
@@ -110,12 +159,11 @@ export default function MyPlanContent() {
                         </h2>
 
                         <p className="mx-auto mt-3 max-w-md text-gray-400">
-                            Add workouts to your plan or save exercises
-                            for later.
+                            Browse the library and add a lift to get today moving.
                         </p>
 
                         <Link
-                            href="/#library"
+                            href="/"
                             className="mt-6 inline-block rounded-full bg-lime-400 px-6 py-3 font-bold text-black"
                         >
                             GO TO WORKOUTS
@@ -125,7 +173,7 @@ export default function MyPlanContent() {
                 ) : (
                     <div className="space-y-4">
 
-                        {workouts.map((workout) => (
+                        {sortedWorkouts.map((workout) => (
                             <div
                                 key={workout.id}
                                 className="flex flex-col gap-5 rounded-2xl border border-white/10 bg-zinc-950 p-4 sm:flex-row sm:items-center"
@@ -149,8 +197,7 @@ export default function MyPlanContent() {
                                         {workout.equipment}
                                     </p>
 
-                                    <div className="mt-4 flex gap-5 text-sm text-gray-400">
-
+                                    <div className="mt-4 flex flex-wrap gap-5 text-sm text-gray-400">
                                         <span className="flex items-center gap-1">
                                             <Clock size={16} />
                                             {workout.duration} min
@@ -161,8 +208,11 @@ export default function MyPlanContent() {
                                             {workout.caloriesBurned} kcal
                                         </span>
 
+                                        <span className="flex items-center gap-1">
+                                            <Star size={16} />
+                                            {workout.rating}
+                                        </span>
                                     </div>
-
                                 </div>
 
                                 {/* Actions */}
@@ -182,11 +232,19 @@ export default function MyPlanContent() {
                                                 showToast(`${workout.name} marked as done`);
                                             }}
                                             disabled={isCompleted(workout.id)}
-                                            className="rounded-full bg-lime-400 px-4 py-2 text-sm font-bold text-black transition hover:bg-lime-300 disabled:cursor-not-allowed disabled:opacity-50"
+                                            className="flex flex-row items-center rounded-full bg-lime-400 px-4 py-2 text-sm font-bold text-black transition hover:bg-lime-300 disabled:cursor-not-allowed disabled:opacity-50"
                                         >
-                                            {isCompleted(workout.id)
-                                                ? "DONE"
-                                                : "MARK AS DONE"}
+                                            {isCompleted(workout.id) ? (
+                                                <>
+                                                    <Check size={16} />
+                                                    DONE
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Check size={16} />
+                                                    MARK AS DONE
+                                                </>
+                                            )}
                                         </button>
                                     )}
 

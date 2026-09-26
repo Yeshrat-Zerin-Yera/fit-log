@@ -14,7 +14,7 @@ interface FitLogContextType {
   plan: Workout[];
   saved: Workout[];
   completed: number[];
-
+  loaded : boolean;
 
   showToast: (message: string) => void;
 
@@ -177,6 +177,7 @@ export function FitLogProvider({
         isInPlan,
         isSaved,
         completed,
+        loaded,
         markAsDone,
         isCompleted,
       }}

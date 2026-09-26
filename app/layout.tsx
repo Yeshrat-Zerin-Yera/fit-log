@@ -19,13 +19,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <FitLogProvider>
-
           <Navbar />
 
           {children}
 
           <Footer />
-
         </FitLogProvider>
       </body>
     </html>
