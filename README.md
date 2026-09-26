@@ -4,7 +4,7 @@ FitLog is a modern workout library and fitness planner built with Next.js. Users
 
 ## Live Project
 
-Add your deployed Vercel URL here after deployment.
+https://fit-log-three-bice.vercel.app/
 
 ## Technologies Used
 
